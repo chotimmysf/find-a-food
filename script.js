@@ -15,7 +15,7 @@ function searchMeal(e) {
   // Get search term
   const term = search.value;
 
-  // Check for empty submission
+  // Check for empty search bar
   if (term.trim()) {
     fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${term}`)
       .then((res) => res.json())
@@ -50,6 +50,22 @@ function searchMeal(e) {
 // Fetch meal by ID
 function getMealByID(mealID) {
   fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealID}`)
+    .then((res) => res.json())
+    .then((data) => {
+      const meal = data.meals[0];
+
+      addMealToDOM(meal);
+    });
+}
+
+// Fetch random meal from API
+function getRandomMeal() {
+  // Clear meals and heading
+  mealsEl.innerHTML = "";
+  resultHeading.innerHTML = "";
+
+  // Make a random food request
+  fetch("https://www.themealdb.com/api/json/v1/1/random.php")
     .then((res) => res.json())
     .then((data) => {
       const meal = data.meals[0];
@@ -95,6 +111,7 @@ function addMealToDOM(meal) {
 
 // Event listeners
 submit.addEventListener("submit", searchMeal);
+submit.addEventListener("click", getRandomMeal);
 
 mealsEl.addEventListener("click", (e) => {
   const mealInfo = e.path.find((item) => {
